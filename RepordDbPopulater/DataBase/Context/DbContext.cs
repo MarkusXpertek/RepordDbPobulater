@@ -11,6 +11,7 @@ namespace RepordDbPopulater.DataBase
 
             string[] lines = File.ReadAllLines(@"./../../../config.txt");
 
+            // fetcing connectionstring from config.txt file
             foreach (string line in lines)
             {
 
