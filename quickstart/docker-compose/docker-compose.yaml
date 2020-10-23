@@ -1,0 +1,58 @@
+version: '3.2'
+
+services:
+  web:
+    image: xpertekacquire/reportdbpopulator:latest
+    environment:
+    - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+    - "1111:80"
+    volumes:
+    - .:/code
+    - type: bind
+      source: ./reports
+      target: /reports
+    networks:
+    - creditdatanetwork
+    depends_on:
+    - mssql
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    ports:
+    - "1433:1433"
+    environment:
+    - ACCEPT_EULA=Y
+    - SA_PASSWORD=Markus@2
+    - MSSQL_PID=Developer
+    networks:
+    - creditdatanetwork
+    volumes:
+    - type: bind
+      source: ./data
+      target: /var/opt/mssql/data
+    - type: bind
+      source: ./log
+      target: /var/opt/mssql/log
+    - type: bind
+      source: ./secrets
+      target: /var/opt/mssql/secrets
+
+  console:
+    image: xpertekacquire/reportdbpopulator:latest
+    environment:
+    - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+    - .:/code
+    - type: bind
+      source: ./reports
+      target: /creditdata/reports
+    networks:
+    - creditdatanetwork
+    depends_on:
+    - mssql
+ 
+volumes:
+  creditdatareports:
+networks:
+  creditdatanetwork:

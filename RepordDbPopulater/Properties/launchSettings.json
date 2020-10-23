@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "RepordDbPobulater": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
