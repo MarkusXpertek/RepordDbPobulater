@@ -1,0 +1,2 @@
+ConnectionString> Data Source=localhost,1433;Initial Catalog=CreditDataDb;User ID=sa;Password=Markus@2
+ReportsLocation>C:\Users\MarkusMadeleyn\source\repos\XpertekAcquire\CreditDataWebAPI\quickstart\docker-compose\reports

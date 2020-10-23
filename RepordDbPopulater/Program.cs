@@ -1,7 +1,6 @@
 ﻿
 using RepordDbPopulater.DataBase;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -11,22 +10,41 @@ namespace RepordDbPopulater
     {
         static void Main(string[] args)
         {
-            //Configurable
-            string folderLocation = @"C:\Users\MarkusMadeleyn\source\repos\XpertekAcquire\CreditDataWebAPI\quickstart\docker-compose\reports";
+            string folderLocation =@"";
+
+            string[] lines = File.ReadAllLines(@"./../../../config.txt");
+
+            Console.WriteLine("Contents of config.txt = ");
+            foreach (string line in lines)
+            {
+                Console.WriteLine("\t" + line);
+
+                string[] info = line.Split('>');
+                if (info[0] == "ReportsLocation")
+                {
+                    folderLocation += info[1];
+
+                    Console.WriteLine(folderLocation);
+                }
+             
+            }
+
+
+
 
 
             string[] Branches = Directory.GetDirectories(folderLocation);
 
             foreach (var branch in Branches)
             {
-                    char[] seperator = { '\\' };
+                char[] seperator = { '\\' };
                 Console.WriteLine(branch.Split(seperator).Last());
 
                 ApiUser user = new ApiUser();
                 using (var context = new DBContext())
                 {
-                        user = context.ApiUsers
-                                .Where(b => b.BranchId == branch.Split(seperator).Last()).First();
+                    user = context.ApiUsers
+                            .Where(b => b.BranchId == branch.Split(seperator).Last()).First();
                 }
 
                 string[] reports = Directory.GetFiles(Path.Combine(folderLocation, Path.GetFileNameWithoutExtension(branch)));
@@ -63,7 +81,7 @@ namespace RepordDbPopulater
                     Console.WriteLine(xmlreport);
 
                     reportsDb[index].XmlReport = File.ReadAllBytes(xmlreport);
-                   
+
                     using (var context = new DBContext())
                     {
                         context.Reports.Add(reportsDb[index]);
